@@ -5464,3 +5464,12 @@ Entries:
   id: 2659
   time: '2026-10-11T15:25:05.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/681
+- author: Dizzy-Eevee
+  changes:
+    - type: Tweak
+      message: >-
+        Characters with the bionic spinarette trait are now able to use their
+        silk in crafting.
+  id: 2660
+  time: '2026-10-11T18:53:24.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/712
