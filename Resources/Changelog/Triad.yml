@@ -5473,3 +5473,12 @@ Entries:
   id: 2660
   time: '2026-10-11T18:53:24.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/712
+- author: Minerva
+  changes:
+    - type: Add
+      message: >-
+        All hardhats have been added to Spacer and Sector Technician loadouts.
+        If you used the existing hardhat, you may need to reapply it in loadout.
+  id: 2661
+  time: '2026-10-11T23:05:42.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/714
