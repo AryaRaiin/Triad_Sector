@@ -5482,3 +5482,18 @@ Entries:
   id: 2661
   time: '2026-10-11T23:05:42.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/714
+- author: TheRealMasterChief117
+  changes:
+    - type: Fix
+      message: >-
+        Fixed safety deposit boxes deleting items that won't fit. Instead,
+        they'll be dropped to the floor.
+    - type: Fix
+      message: Fixed infinite reclaimer and industrial grinder loops.
+    - type: Fix
+      message: >-
+        Recyclers, reclaimers, and industrial grinders now properly recycles
+        item stacks
+  id: 2662
+  time: '2026-10-12T00:06:55.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/713
