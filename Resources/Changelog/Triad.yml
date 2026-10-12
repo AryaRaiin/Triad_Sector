@@ -5497,3 +5497,12 @@ Entries:
   id: 2662
   time: '2026-10-12T00:06:55.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/713
+- author: TheRealMasterChief117
+  changes:
+    - type: Fix
+      message: Shadekin can now wear underwear
+    - type: Add
+      message: Reptilians now have displacement maps for outer clothing!
+  id: 2663
+  time: '2026-10-12T01:43:32.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/715
