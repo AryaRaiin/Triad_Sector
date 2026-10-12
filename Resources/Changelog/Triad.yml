@@ -5506,3 +5506,22 @@ Entries:
   id: 2663
   time: '2026-10-12T01:43:32.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/715
+- author: Nox38
+  changes:
+    - type: Remove
+      message: >-
+        Gas masks no longer can give welding and flash protection, besides the
+        welding gas mask which now obstructs vision.
+    - type: Tweak
+      message: >-
+        Rebalanced eyewear. Night vision goggles are more effective, diagnostic
+        HUD and tactical glasses now have a niche. Pilot goggles now have a mass
+        scanner!
+    - type: Tweak
+      message: >-
+        Rebalanced helmet effects. All security suits now have sechuds, while
+        medical suits come with built in medhuds, engineering suits have t-rays
+        and diagnostic huds, and more!
+  id: 2664
+  time: '2026-10-12T13:09:39.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/706
