@@ -5584,3 +5584,12 @@ Entries:
   id: 2669
   time: '2026-10-13T23:17:50.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/723
+- author: Minerva
+  changes:
+    - type: Fix
+      message: >-
+        Reptilian claws now use pronouns and have self-examine texts in
+        examination, as well as being rephrased in a few places.
+  id: 2670
+  time: '2026-10-13T23:32:51.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/718
