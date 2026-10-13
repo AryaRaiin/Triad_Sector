@@ -5576,3 +5576,10 @@ Entries:
   id: 2667
   time: '2026-10-13T21:54:22.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/720
+- author: TheRealMasterChief117
+  changes:
+    - type: Fix
+      message: Fixed chameleon projectors making users invisible!
+  id: 2668
+  time: '2026-10-13T22:11:27.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/721
