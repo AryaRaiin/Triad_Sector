@@ -5569,3 +5569,10 @@ Entries:
   id: 2666
   time: '2026-10-13T12:00:55.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/645
+- author: TheRealMasterChief117
+  changes:
+    - type: Tweak
+      message: Resprited biosuit helmets to fit the artstyle!
+  id: 2667
+  time: '2026-10-13T21:54:22.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/720
