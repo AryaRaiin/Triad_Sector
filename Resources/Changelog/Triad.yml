@@ -5593,3 +5593,10 @@ Entries:
   id: 2670
   time: '2026-10-13T23:32:51.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/718
+- author: DDrakov
+  changes:
+    - type: Tweak
+      message: Tweaked some texture resolution and it's preload/meta atlas
+  id: 2671
+  time: '2026-10-13T23:33:26.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/717
