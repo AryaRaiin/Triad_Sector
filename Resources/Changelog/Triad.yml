@@ -5556,16 +5556,11 @@ Entries:
   id: 2665
   time: '2026-10-13T01:48:52.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/560
-- author: SleepyCheesehead
+- author: TheRealMasterChief117
   changes:
     - type: Add
       message: >-
-        Something drifting into the district, a relic of unchecked greed
-        manifested
-    - type: Remove
-      message: >-
-        Recent report of an unknown entities has dismantled Sevastopol Data
-        Center, nothing remain.
+        Added terralith R&M icons
   id: 2666
   time: '2026-10-13T12:00:55.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/645
