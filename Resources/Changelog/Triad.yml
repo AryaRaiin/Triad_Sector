@@ -5525,3 +5525,34 @@ Entries:
   id: 2664
   time: '2026-10-12T13:09:39.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/706
+- author: TheRealMasterChief117
+  changes:
+    - type: Add
+      message: Added popup and damage sounds for being burnt by thruster exhaust!
+    - type: Tweak
+      message: >-
+        Thruster exhaust now burns objects in a 6-tile distance, including
+        structures. The damage scales with how close the object is to the
+        exhaust. The exhaust damage for mobs still has the same 2-tile range
+    - type: Add
+      message: Grilles and railings are immune to thruster exhaust damage.
+    - type: Tweak
+      message: >-
+        Thrusters now need a path to clear space to function. This path doesn't
+        need to be the same direction as the nozzle, as long as most of the
+        thruster is exposed to space. Only windows, walls, and doors count
+        towards blocking it. Grilles and other small structures DO NOT block
+        this path.
+    - type: Fix
+      message: >-
+        Fixed thrusters exhaust damage sometimes dealing twice or three times as
+        much damage than normal.
+    - type: Remove
+      message: Removed rules regarding thruster restrictions
+    - type: Fix
+      message: Fixed thrusters power load not working correctly when toggled.
+    - type: Fix
+      message: Fixed thrusters sometimes firing even when the ship is not moving.
+  id: 2665
+  time: '2026-10-13T01:48:52.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/560
