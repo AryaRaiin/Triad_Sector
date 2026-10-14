@@ -46,6 +46,7 @@
         components:
         - MobState
         - Door
+        - PowerSupplier
         tags:
         - Window
         - Wall
