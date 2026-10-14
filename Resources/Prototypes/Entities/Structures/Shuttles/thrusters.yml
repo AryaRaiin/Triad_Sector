@@ -47,6 +47,7 @@
         - MobState
         - Door
         - PowerSupplier
+        - SpaceArtillery
         tags:
         - Window
         - Wall
