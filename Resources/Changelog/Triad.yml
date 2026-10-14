@@ -5605,3 +5605,15 @@ Entries:
   id: 2672
   time: '2026-10-14T15:17:59.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/727
+- author: Eillyrea
+  changes:
+    - type: Add
+      message: >-
+        More Deposit boxes around Venmar.  High Command has also seen fit to add
+        additional disposals units because lazy creatures are dumping all of
+        their trash infront of the shipyard consoles.
+    - type: Fix
+      message: 'Some minor QA issues on Venmar. '
+  id: 2673
+  time: '2026-10-14T18:57:09.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/728
