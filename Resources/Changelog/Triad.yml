@@ -5654,3 +5654,10 @@ Entries:
   id: 2677
   time: '2026-10-15T18:58:26.0000000+00:00'
   url: https://github.com/Triad-Sector/Triad_Sector/pull/732
+- author: DDrakov
+  changes:
+    - type: Fix
+      message: Fixed AI core shooting burst shipgun issue
+  id: 2678
+  time: '2026-10-16T03:09:01.0000000+00:00'
+  url: https://github.com/Triad-Sector/Triad_Sector/pull/733
