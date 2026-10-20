@@ -27,10 +27,4 @@ public sealed class CoyoteCCVars
     /// </summary>
     public static readonly CVarDef<string> ShuttleInactiveCrewColor =
         CVarDef.Create("coyote.shuttle.inactive_crew_color", "#808080", CVar.SERVER);
-
-    /// <summary>
-    /// Enables verbose logging for shuttle crew status logic.
-    /// </summary>
-    public static readonly CVarDef<bool> ShuttleCrewStatusDebug =
-        CVarDef.Create("coyote.shuttle.crew_status_debug", false, CVar.SERVER);
 }

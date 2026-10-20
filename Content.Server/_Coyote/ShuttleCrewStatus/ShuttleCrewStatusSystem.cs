@@ -29,8 +29,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
     private TimeSpan _randomVisualJitter = TimeSpan.FromSeconds(25);
     // Color used when no active crew is present.
     private Color _inactiveCrewColor = Color.Gray;
-    // Verbose debug logging toggle.
-    private bool _debug;
 
     public override void Initialize()
     {
@@ -52,11 +50,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
             UpdateInactiveCrewColor,
             invokeImmediately: true);
 
-        _cfg.OnValueChanged(
-            CoyoteCCVars.ShuttleCrewStatusDebug,
-            UpdateDebug,
-            invokeImmediately: true);
-
         // Handles disconnect/zombie transitions even when no movement event is fired.
         _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
     }
@@ -67,22 +60,17 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
         _cfg.UnsubValueChanged(CoyoteCCVars.ShuttleCrewUpdateBaseDelaySeconds, UpdateBaseVisualDelay);
         _cfg.UnsubValueChanged(CoyoteCCVars.ShuttleCrewUpdateRandomJitterSeconds, UpdateRandomVisualJitter);
         _cfg.UnsubValueChanged(CoyoteCCVars.ShuttleInactiveCrewColor, UpdateInactiveCrewColor);
-        _cfg.UnsubValueChanged(CoyoteCCVars.ShuttleCrewStatusDebug, UpdateDebug);
         _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
     }
 
     private void UpdateBaseVisualDelay(int seconds)
     {
         _baseVisualDelay = TimeSpan.FromSeconds(Math.Max(0, seconds));
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] baseDelay={_baseVisualDelay}");
     }
 
     private void UpdateRandomVisualJitter(int seconds)
     {
         _randomVisualJitter = TimeSpan.FromSeconds(Math.Max(0, seconds));
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] randomJitter={_randomVisualJitter}");
     }
 
     private void UpdateInactiveCrewColor(string colorText)
@@ -95,14 +83,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
         }
 
         _inactiveCrewColor = parsed;
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] inactiveColor={_inactiveCrewColor}");
-    }
-
-    private void UpdateDebug(bool value)
-    {
-        _debug = value;
-        Log.Info($"[ShuttleCrewStatus] debug={_debug}");
     }
 
     [SubscribeLocalEvent]
@@ -118,12 +98,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
         crewStatus.OriginalColor = component.Color;
         crewStatus.HasActiveCrew = HasActivePlayersOnGrid(uid);
         crewStatus.PendingVisualUpdate = false;
-
-        if (_debug)
-        {
-            Log.Info($"[ShuttleCrewStatus] MapInit grid={uid} " +
-                     $"origColor={crewStatus.OriginalColor} hasActive={crewStatus.HasActiveCrew}");
-        }
     }
 
     [SubscribeLocalEvent]
@@ -148,12 +122,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
             oldGrid = oldParentXform.GridUid;
         }
 
-        if (_debug)
-        {
-            Log.Info($"[ShuttleCrewStatus] ParentChanged entity={uid} oldParent={ev.OldParent} oldMap={ev.OldMapId} " +
-                     $"oldGrid={oldGrid} newGrid={newGrid} sessionStatus={session.Status}");
-        }
-
         if (oldGrid is { } oldGridUid)
             QueueStatusRefresh(oldGridUid);
 
@@ -170,9 +138,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
         if (xform.GridUid is not { } gridUid)
             return;
 
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] PlayerAttached entity={ev.Entity} grid={gridUid}");
-
         QueueStatusRefresh(gridUid);
     }
 
@@ -186,9 +151,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
 
         if (e.Session.AttachedEntity is not { } ent)
         {
-            if (_debug)
-                Log.Info($"[ShuttleCrewStatus] StatusChanged with null AttachedEntity (old={e.OldStatus}, new={e.NewStatus})");
-
             // Optional safety net for disconnect/zombie transitions.
             if (becameInactive)
                 RefreshTrackedPlayerShuttles();
@@ -202,9 +164,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
 
         if (xform.GridUid is not { } gridUid)
             return;
-
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] PlayerStatusChanged entity={ent} old={e.OldStatus} new={e.NewStatus} grid={gridUid}");
 
         QueueStatusRefresh(gridUid);
     }
@@ -223,26 +182,14 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
 
     private void QueueStatusRefresh(EntityUid gridUid)
     {
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] Refresh start grid={gridUid}");
-
         if (!TryComp<ShuttleComponent>(gridUid, out _))
-        {
-            if (_debug) Log.Info($"[ShuttleCrewStatus] Refresh skip grid={gridUid}: no ShuttleComponent");
             return;
-        }
 
         if (!TryComp<IFFComponent>(gridUid, out var iff))
-        {
-            if (_debug) Log.Info($"[ShuttleCrewStatus] Refresh skip grid={gridUid}: no IFFComponent");
             return;
-        }
 
         if ((iff.Flags & IFFFlags.IsPlayerShuttle) == 0)
-        {
-            if (_debug) Log.Info($"[ShuttleCrewStatus] Refresh skip grid={gridUid}: not IsPlayerShuttle");
             return;
-        }
 
         var crewStatus = EnsureComp<ShuttleCrewStatusComponent>(gridUid);
 
@@ -258,13 +205,6 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
             crewStatus.PendingHasActiveCrew != computedActive)
         {
             crewStatus.PendingVisualUpdate = false;
-
-            if (_debug)
-            {
-                Log.Info($"[ShuttleCrewStatus] Refresh canceled stale pending transition grid={gridUid} " +
-                         $"applied={crewStatus.HasActiveCrew} pendingTarget={crewStatus.PendingHasActiveCrew} computed={computedActive}");
-            }
-
             return;
         }
 
@@ -274,30 +214,13 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
             ? crewStatus.PendingHasActiveCrew
             : crewStatus.HasActiveCrew;
 
-        if (_debug)
-        {
-            Log.Info($"[ShuttleCrewStatus] Refresh grid={gridUid} computed={computedActive} " +
-                     $"applied={crewStatus.HasActiveCrew} pending={crewStatus.PendingVisualUpdate} " +
-                     $"pendingTarget={crewStatus.PendingHasActiveCrew} effective={effectiveActive}");
-        }
-
         // If desired state already represented (or already queued), do nothing.
         if (computedActive == effectiveActive)
-        {
-            if (_debug) Log.Info($"[ShuttleCrewStatus] Refresh no-op grid={gridUid}: computed matches effective");
             return;
-        }
 
         crewStatus.PendingHasActiveCrew = computedActive;
         crewStatus.PendingVisualUpdate = true;
         crewStatus.ApplyVisualAt = _timing.CurTime + GetVisualDelay();
-
-        if (_debug)
-        {
-            var delay = crewStatus.ApplyVisualAt - _timing.CurTime;
-            Log.Info($"[ShuttleCrewStatus] Refresh scheduled grid={gridUid} targetActive={computedActive} " +
-                     $"applyAt={crewStatus.ApplyVisualAt} delay={delay}");
-        }
     }
 
     private TimeSpan GetVisualDelay()
@@ -327,11 +250,7 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
             crewStatus.PendingVisualUpdate = false;
 
             if (crewStatus.PendingHasActiveCrew == crewStatus.HasActiveCrew)
-            {
-                if (_debug)
-                    Log.Info($"[ShuttleCrewStatus] Apply no-op grid={uid}: pending matches applied");
                 continue;
-            }
 
             crewStatus.HasActiveCrew = crewStatus.PendingHasActiveCrew;
 
@@ -339,16 +258,10 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
             {
                 if (crewStatus.OriginalColor.HasValue)
                     _shuttle.SetIFFColor(uid, crewStatus.OriginalColor.Value, iff);
-
-                if (_debug)
-                    Log.Info($"[ShuttleCrewStatus] Apply grid={uid}: ACTIVE restoreColor={crewStatus.OriginalColor}");
             }
             else
             {
                 _shuttle.SetIFFColor(uid, _inactiveCrewColor, iff);
-
-                if (_debug)
-                    Log.Info($"[ShuttleCrewStatus] Apply grid={uid}: INACTIVE setColor={_inactiveCrewColor}");
             }
         }
     }
@@ -371,15 +284,8 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
                 continue;
 
             if (playerXform.GridUid == gridUid)
-            {
-                if (_debug)
-                    Log.Info($"[ShuttleCrewStatus] ActiveCheck grid={gridUid}: TRUE via playerEntity={playerEntity}");
                 return true;
-            }
         }
-
-        if (_debug)
-            Log.Info($"[ShuttleCrewStatus] ActiveCheck grid={gridUid}: FALSE");
 
         return false;
     }
