@@ -24,6 +24,8 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
 
     [Dependency] private EntityQuery<TransformComponent> _transformQuery = default!;
+    [Dependency] private EntityQuery<ShuttleComponent> _shuttleQuery = default!;
+    [Dependency] private EntityQuery<IFFComponent> _iffQuery = default!;
 
     // Delay window for visual IFF changes (base + random jitter).
     private TimeSpan _baseVisualDelay = TimeSpan.FromSeconds(20);
@@ -89,12 +91,11 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
     [SubscribeLocalEvent]
     private void OnIFFMapInit(EntityUid uid, IFFComponent component, MapInitEvent args)
     {
-        if (!TryComp<ShuttleComponent>(uid, out _))
+        if (!TryComp<ShuttleComponent>(uid, out _) ||
+            (component.Flags & IFFFlags.IsPlayerShuttle) == 0)
+        {
             return;
-
-        if ((component.Flags & IFFFlags.IsPlayerShuttle) == 0)
-            return;
-
+        }
         var crewStatus = EnsureComp<ShuttleCrewStatusComponent>(uid);
         crewStatus.OriginalColor = component.Color;
         crewStatus.HasActiveCrew = HasActivePlayersOnGrid(uid);
@@ -183,15 +184,12 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
 
     private void QueueStatusRefresh(EntityUid gridUid)
     {
-        if (!TryComp<ShuttleComponent>(gridUid, out _))
+        if (!_shuttleQuery.HasComp(gridUid) ||
+            !_iffQuery.TryGetComponent(gridUid, out var iff) ||
+            (iff.Flags & IFFFlags.IsPlayerShuttle) == 0)
+        {
             return;
-
-        if (!TryComp<IFFComponent>(gridUid, out var iff))
-            return;
-
-        if ((iff.Flags & IFFFlags.IsPlayerShuttle) == 0)
-            return;
-
+        }
         var crewStatus = EnsureComp<ShuttleCrewStatusComponent>(gridUid);
 
         if (!crewStatus.OriginalColor.HasValue)
@@ -271,18 +269,14 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
     {
         foreach (var session in _playerManager.Sessions)
         {
-            if (session.Status is SessionStatus.Disconnected or SessionStatus.Zombie)
-                continue;
-
-            if (session.AttachedEntity is not { } playerEntity)
-                continue;
-
             // Ignore ghosted/observer players for shuttle crew activity.
-            if (HasComp<GhostComponent>(playerEntity))
+            if (session.Status is SessionStatus.Disconnected or SessionStatus.Zombie ||
+                session.AttachedEntity is not { } playerEntity ||
+                HasComp<GhostComponent>(playerEntity) ||
+                !_transformQuery.TryGetComponent(playerEntity, out var playerXform))
+            {
                 continue;
-
-            if (!_transformQuery.TryGetComponent(playerEntity, out var playerXform))
-                continue;
+            }
 
             if (playerXform.GridUid == gridUid)
                 return true;
