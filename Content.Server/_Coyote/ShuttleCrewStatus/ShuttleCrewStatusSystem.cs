@@ -22,6 +22,7 @@ public sealed partial class ShuttleCrewStatusSystem : EntitySystem
     [Dependency] private SharedShuttleSystem _shuttle = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IRobustRandom _random = default!;
+
     [Dependency] private EntityQuery<TransformComponent> _transformQuery = default!;
 
     // Delay window for visual IFF changes (base + random jitter).
